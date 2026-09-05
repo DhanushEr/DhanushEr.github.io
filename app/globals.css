@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --ground: #0e1116;
+    --surface: #161b23;
+    --line: #28313d;
+    --ink: #e8edf4;
+    --vision: #ffb020;
+    --infer: #3fd8c8;
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Sticky nav clearance for anchor jumps. */
+    scroll-padding-top: 5.5rem;
+  }
+
+  body {
+    background-color: var(--ground);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--vision);
+    color: #0e1116;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--infer);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Annotation frame: corner brackets that read as a detection box. */
+  .annotation-frame {
+    position: relative;
+  }
+  .annotation-frame::before,
+  .annotation-frame::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-color: var(--vision);
+    border-style: solid;
+    opacity: 0.65;
+    pointer-events: none;
+  }
+  .annotation-frame::before {
+    top: -1px;
+    left: -1px;
+    border-width: 1px 0 0 1px;
+  }
+  .annotation-frame::after {
+    right: -1px;
+    bottom: -1px;
+    border-width: 0 1px 1px 0;
+  }
+
+  .rule-grid {
+    background-image:
+      linear-gradient(to right, rgba(40, 49, 61, 0.55) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(40, 49, 61, 0.55) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+}
