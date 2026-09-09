@@ -85,8 +85,9 @@ export const projects: Project[] = [
     period: 'Dec 2025 – Jan 2026',
     treatment: 'demo',
     layer: 'infer',
+    ownership: 'Proof of concept',
     premise:
-      'Draw a site boundary and the system proposes a full building layout — footprints, roads, parking — then renders it as a navigable 3D scene for review.',
+      'Draw a plot and the system reads OpenStreetMap data to find its usable construction area, then lays out buildings, amenities and internal roads — giving a layout engineer a fast read on how effectively the land can be used, rendered as a navigable 3D scene. Built to proof-of-concept and handed to pre-sales.',
     contribution: [
       'Improved LLM-driven layout generation by replacing a fixed max-height heuristic with dimension-based 3D model matching — adding a model-dimension lookup and reworked classification prompt so generated footprints resolve to models that physically fit the plot.',
       'Refactored building-height logic, type and floor-count tables, and pipeline logging across the generation pipeline.',
@@ -103,7 +104,7 @@ export const projects: Project[] = [
     treatment: 'case-study',
     layer: 'infer',
     premise:
-      'Every client onboards thousands of drawing and specification PDFs, unstructured and manually indexed. This turns both into structured, searchable records feeding one retrieval index.',
+      'Every client onboards thousands of drawing and specification PDFs. Cataloguing a drawing set by hand took days; this turns both document types into structured, searchable records in under an hour, feeding the retrieval index clients search against.',
     contribution: [
       'Built a hierarchical LLM-agent system that classifies drawing sheets by discipline and sheet number, and extracts drawing-set and version information with bulk backfill across existing sets.',
       'Built table-of-contents-aware parsing for specification documents, with dynamic sub-section extraction and PDF section splitting.',
