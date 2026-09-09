@@ -41,12 +41,12 @@ export const projects: Project[] = [
     premise:
       'Weekly construction-site footage goes in; structured safety hazards and quality defects come out — each tagged against a taxonomy, using detection rules derived from that project’s own safety documentation rather than a fixed generic rule set.',
     contribution: [
-      'Built and iterated the hazard/defect detection model across three architectures — SAHI-tiled YOLO, RF-DETR, then TorchVision Faster R-CNN — adding tiled inference for high-resolution site imagery, S3-backed model loading and caching, and a resolution-independent blur gate that rejects unusable frames.',
+      'Delivered detection to production sites with no GPU budget — inference had to run on CPU-only EC2. Iterated the model across three architectures (SAHI-tiled YOLO, RF-DETR, then TorchVision Faster R-CNN) and tuned tiled inference to reach ~86% precision (mAP 0.65–0.70) on 4K drone imagery inside that constraint.',
+      'Made CPU inference viable by cutting the work roughly 99%: frame selection, ORB feature-similarity deduplication and a resolution-independent blur gate reduce a one-minute 4K clip from ~1,800 frames to the 6–7 genuinely unique ones worth detecting on.',
       'Consolidated safety and quality detection into a single inference pass, served through both synchronous and batched asynchronous APIs.',
       'Layered vision-language labeling over raw detections, turning boxes into semantic issue descriptions mapped to a deterministic CSI-code and quality taxonomy.',
-      'Designed a six-stage LLM agent chain — parse, sentence-split, rule extraction, filtering, mapping, deduplication — that converts a project’s uploaded safety and quality documents into project-specific detection rules.',
-      'Engineered the production video pipeline: database-driven stage orchestration with per-stage status tracking, video compression, and ORB feature-similarity frame deduplication to avoid redundant inference on near-identical frames.',
-      'Authored the Dockerfiles and AWS Lambda trigger/runner scripts handed to the DevOps team for release.',
+      'Designed a six-stage LLM agent chain — parse, sentence-split, rule extraction, filtering, mapping, deduplication — that converts a project’s uploaded safety and quality documents into project-specific detection rules, so flags reflect that site’s requirements instead of a fixed generic rule set.',
+      'Engineered the production video pipeline: database-driven stage orchestration with per-stage status tracking and video compression; authored the Dockerfiles and AWS Lambda trigger/runner scripts handed to the DevOps team for release.',
     ],
     stack: [
       'Python',
@@ -69,11 +69,11 @@ export const projects: Project[] = [
     layer: 'infer',
     ownership: 'Sole author',
     premise:
-      'A site engineer dictates a report in whatever language mix comes naturally; the system returns a submit-ready structured record against the right form, with every name resolved to a real entity ID.',
+      'A site engineer dictates a report in whatever language mix comes naturally; the system returns a submit-ready structured record against the right form, with every name resolved to a real entity ID — cutting form entry from 2–5 minutes of typing to under a minute.',
     contribution: [
       'Designed and built the entire service: a two-agent LLM pipeline where the first agent matches utterance intent against the tenant’s live form types and the second extracts field values against that form’s real schema.',
       'Added an LLM normalization stage that handles code-mixed input — Tamil, Hindi, English and transliterated variants — while preserving construction terminology and form-type abbreviations.',
-      'Cut end-to-end latency by running the form-selection LLM call and the database schema prefetch concurrently on a thread pool, so field definitions are ready the moment the first agent returns.',
+      'Halved end-to-end response time from 10–12s to 5–6s by running the form-selection LLM call and the database schema prefetch concurrently on a thread pool, so field definitions are ready the moment the first agent returns — on site, every extra second of waiting pushes users back to typing.',
       'Built deterministic post-processing that resolves extracted names — assignees, dropdown options, site locations — to internal entity IDs, discarding unmatched values rather than emitting bad data.',
     ],
     stack: ['Python', 'Flask', 'OpenAI API (sync + async)', 'asyncio', 'ThreadPoolExecutor', 'PostgreSQL'],
@@ -103,7 +103,7 @@ export const projects: Project[] = [
     treatment: 'case-study',
     layer: 'infer',
     premise:
-      'Construction drawing sets and technical specification documents are unstructured PDFs. This turns both into structured, searchable records feeding one retrieval index.',
+      'Every client onboards thousands of drawing and specification PDFs, unstructured and manually indexed. This turns both into structured, searchable records feeding one retrieval index.',
     contribution: [
       'Built a hierarchical LLM-agent system that classifies drawing sheets by discipline and sheet number, and extracts drawing-set and version information with bulk backfill across existing sets.',
       'Built table-of-contents-aware parsing for specification documents, with dynamic sub-section extraction and PDF section splitting.',
@@ -131,6 +131,7 @@ export const projects: Project[] = [
 ];
 
 export const capabilities = [
+  'CPU-only inference',
   'SAHI-tiled inference',
   'RF-DETR',
   'Faster R-CNN',
@@ -173,7 +174,7 @@ export const skillGroups: { label: string; layer: Layer; items: string[] }[] = [
       'YOLO / SAHI tiled inference',
       'OpenCV',
       'object detection',
-      'inference optimization',
+      'CPU-only inference optimization',
     ],
   },
   {
